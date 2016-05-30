@@ -270,7 +270,7 @@ public class UnionPayClient {
 					return retStr;
 		    	}
 		    	
-		    	downloadText(cacheIdString, textPath);
+		    	downloadExcel(cacheIdString, textPath);
 		    	
 		    	retStr = "success";
 				return retStr;
@@ -604,6 +604,35 @@ public class UnionPayClient {
 		getTxtHttpGet.releaseConnection();
 	}
 
+	private void downloadExcel(String CacheIdStr, String pathName){
+		Date date = new Date();
+        SimpleDateFormat excelDatefDateFormat=new SimpleDateFormat("yyyyMMddHHmmss");        
+		String excelString = excelDatefDateFormat.format(date);  
+        String saveExcelName = null;
+		try {
+			saveExcelName = Base64.encodeBase64String(excelString.getBytes("utf-8"));
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+        HttpGet getExcelHttpGet = new HttpGet("https://service.chinaums.com/uis/viewReportServlet?action=6&format=excel&isNeedFormula=0&dispRatio=100&reportName=c2V0dGxlUmVjb3JkU2VhcmNoVGVtcGxhdGUvMjAxMzA5MDkwMDAwMDAwMS5yYXE%2C&cacheId="+CacheIdStr+"&saveAsName="+saveExcelName+"&textDataSeparator=%7C&textDataLineBreak=%0D%0A&excelPageStyle=0&excelFormat=2003&wordFormat=2003&excelUsePaperSize=yes&width=988px&height=0&columns=13&pdfExportStyle=text%2C1&backAndRefresh=yes");
+        
+        HttpResponse getExcelResponse;
+		try {
+			getExcelResponse = httpClient.execute(getExcelHttpGet);
+			HttpEntity getExcelEntity = getExcelResponse.getEntity();
+	        if (getExcelEntity != null) {
+	            InputStream instream = getExcelEntity.getContent();
+	            download(instream, pathName+ "//" +excelString+".xls");
+	            instream.close();	            
+	        }
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		getExcelHttpGet.releaseConnection();
+	}
+	
 	public  String getUserName() {
 		return userName;
 	}
@@ -626,7 +655,7 @@ public class UnionPayClient {
 	}
 
 	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
+		this.imagePath = imagePath + "//vcode.jpg";
 	}
 
 	public String getTextPath() {

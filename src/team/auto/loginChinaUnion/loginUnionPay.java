@@ -22,9 +22,11 @@ public class loginUnionPay {
 			String account=alist.get(i).getAccount();
 		    String password=alist.get(i).getPassword();
 		    UnionPayClient uPayClient = new UnionPayClient(account, password);
-	    	uPayClient.setImagePath("F://WebCode//image//vcode.jpg");
-	    	uPayClient.setTextPath("F://WebCode//Data");	    	
+	    	uPayClient.setImagePath("E://Eclipse_code//image");
+	    	uPayClient.setTextPath("E://Eclipse_code//data");
+	    	
 	    	String ret = uPayClient.downloadAccountCheckWithDate("2015-12-01","2015-12-31");
+	    	
 	    	if(ret.equals("no such user") || ret.equals("ValidPassword"))
 	    	{
 	    		blist.add(alist.get(i));
