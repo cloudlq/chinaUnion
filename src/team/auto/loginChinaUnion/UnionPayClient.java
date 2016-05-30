@@ -1,4 +1,4 @@
-package team.auto.loginUnionPay;
+package team.auto.loginChinaUnion;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -70,17 +70,28 @@ public class UnionPayClient {
 	 * 4、提交设置的起始日期，查对账明细, 获取CacheId
 	 * 5、提交运算报表请求
 	 * 6、下载对账单
+	 * 
+	 * @return
+	 * success:对账单下载成功
+	 * input error：参数输入有误
+	 * no such user：没有该用户
+	 * ValidPassword：密码错误
+	 * CacheId error：CacheId错误
+	 * qryAccountCheck error：对账单请求失败 
+	 * login error：未知登录错误
 	 */
-	public Boolean downloadAccountCheck(int days){
-		Boolean isSuccess = false;
+	public String downloadAccountCheck(int days){
+		String retStr;
 		if(days <= 0){			
 			System.err.println("查询账单日期需为正整数");
-			return isSuccess;
+			retStr = "input error";
+			return retStr;
 		}
 			
 		if(imagePath == null || textPath == null){
 			System.err.println("请先设置imagePath和textPath");
-			return isSuccess;
+			retStr = "input error";
+			return retStr;
 		}
 		
 		while(true) {
@@ -91,7 +102,7 @@ public class UnionPayClient {
 				continue;
 			}
 			//登陆
-			String retString = loginUnionPay(validateCode);
+			String loginRetString = loginUnionPay(validateCode);
 			/*
 			 * @return 
 			 * LoginSuccess:登陆成功
@@ -100,7 +111,7 @@ public class UnionPayClient {
 			 * ValidCode:验证码错误
 			 * NoSuchUser:没有该用户
 			 */
-			if(retString.equals("LoginSuccess")){
+			if(loginRetString.equals("LoginSuccess")){
 				//登陆成功
 				
 				//进入首页
@@ -129,44 +140,71 @@ public class UnionPayClient {
 		    	//CacheId获取失败
 		    	if(cacheIdString.equals("error")){
 		    		System.err.println("CacheId获取失败");
-		    		isSuccess = false;
-		    		break;
+		    		retStr = "CacheId error";
+					return retStr;
 		    	}
 		    	
 		    	//提交运算报表请求
-		    	retString = requestAccountCheck(cacheIdString);
+		    	String qryretString = requestAccountCheck(cacheIdString);
 		    	//运算报表请求失败
-		    	if(retString.equals("error")){
+		    	if(qryretString.equals("error")){
 		    		System.err.println("运算报表请求失败");
-		    		isSuccess = false;
-		    		break;
+		    		retStr = "qryAccountCheck error";
+					return retStr;
 		    	}
 		    	
 		    	downloadText(cacheIdString, textPath);
 		    	
-				isSuccess = true;
-				break;
-			}else if(retString.equals("ValidCode")){
+		    	retStr = "success";
+				return retStr;
+			}else if(loginRetString.equals("ValidCode")){
 				//验证码错误
-				System.err.println(retString);
+				System.err.println(loginRetString);
 				continue;
+			}else if(loginRetString.equals("NoSuchUser")){
+				//没有该用户
+				System.err.println("登陆失败："+loginRetString);
+				retStr = "no such user";
+				return retStr;
+			}else if(loginRetString.equals("ValidPassword")){
+				//密码错误
+				System.err.println("登陆失败："+loginRetString);
+				retStr = "ValidPassword";
+				return retStr;
 			}else{
-				//登陆失败、密码错误、没有该用户
-				System.err.println("登陆失败："+retString);
-				isSuccess = false;
-				break;
+				//登陆失败
+				System.err.println("登陆失败："+loginRetString);
+				retStr = "login error";
+				return retStr;
 			}
 		}
-    	return isSuccess;
 	}
 
-	
-	public Boolean downloadAccountCheckWithDate(String settDateBegin, String settDateEnd){
-		Boolean isSuccess = false;
+	/*
+	 * 
+	 * 1、获取验证码
+	 * 2、登录
+	 * 3、进入首页
+	 * 4、提交设置的起始日期，查对账明细, 获取CacheId
+	 * 5、提交运算报表请求
+	 * 6、下载对账单
+	 * 
+	 * @return
+	 * success:对账单下载成功
+	 * input error：参数输入有误
+	 * no such user：没有该用户
+	 * ValidPassword：密码错误
+	 * CacheId error：CacheId错误
+	 * qryAccountCheck error：对账单请求失败 
+	 * login error：未知登录错误
+	 */
+	public String downloadAccountCheckWithDate(String settDateBegin, String settDateEnd){
+		String retStr;
 			
 		if(imagePath == null || textPath == null){
 			System.err.println("请先设置imagePath和textPath");
-			return isSuccess;
+			retStr = "input error";
+			return retStr;
 		}
 		//判断日期是否符合规范
         String rexp = "^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))";
@@ -185,10 +223,11 @@ public class UnionPayClient {
         
         if(!BeginDate || !EndDate){
         	System.err.println("设置正确的日期格式：yyyy-MM-dd");
-        	return isSuccess;
+        	retStr = "input error";
+			return retStr;
         }
 		
-		while(true) {
+        while(true) {
 			//验证码
 			String validateCode = getValidateCode(imagePath);
 			//验证码错误，重新识别验证码
@@ -196,7 +235,7 @@ public class UnionPayClient {
 				continue;
 			}
 			//登陆
-			String retString = loginUnionPay(validateCode);
+			String loginRetString = loginUnionPay(validateCode);
 			/*
 			 * @return 
 			 * LoginSuccess:登陆成功
@@ -204,12 +243,13 @@ public class UnionPayClient {
 			 * ValidPassword:密码错误
 			 * ValidCode:验证码错误
 			 * NoSuchUser:没有该用户
+			 * ServerError：系统处理失败
 			 */
-			if(retString.equals("LoginSuccess")){
+			if(loginRetString.equals("LoginSuccess")){
 				//登陆成功
 				
 				//进入首页
-				intoDesktop();				
+				intoDesktop();
 				
 				//根据日期查找对账明细, 获取CacheId
 		    	String cacheIdString = accountCheckWithDate(settDateBegin, settDateEnd);
@@ -217,35 +257,48 @@ public class UnionPayClient {
 		    	//CacheId获取失败
 		    	if(cacheIdString.equals("error")){
 		    		System.err.println("CacheId获取失败");
-		    		isSuccess = false;
-		    		break;
+		    		retStr = "CacheId error";
+					return retStr;
 		    	}
 		    	
 		    	//提交运算报表请求
-		    	retString = requestAccountCheck(cacheIdString);
+		    	String qryretString = requestAccountCheck(cacheIdString);
 		    	//运算报表请求失败
-		    	if(retString.equals("error")){
+		    	if(qryretString.equals("error")){
 		    		System.err.println("运算报表请求失败");
-		    		isSuccess = false;
-		    		break;
+		    		retStr = "qryAccountCheck error";
+					return retStr;
 		    	}
 		    	
 		    	downloadText(cacheIdString, textPath);
 		    	
-				isSuccess = true;
-				break;
-			}else if(retString.equals("ValidCode")){
+		    	retStr = "success";
+				return retStr;
+			}else if(loginRetString.equals("ValidCode")){
 				//验证码错误
-				System.err.println(retString);
+				System.err.println(loginRetString);
 				continue;
+			}else if(loginRetString.equals("ServerError")){
+				//系统处理失败
+				System.err.println("系统处理失败："+loginRetString);
+				continue;
+			}else if(loginRetString.equals("NoSuchUser")){
+				//没有该用户
+				System.err.println("登陆失败："+loginRetString);
+				retStr = "no such user";
+				return retStr;
+			}else if(loginRetString.equals("ValidPassword")){
+				//密码错误
+				System.err.println("登陆失败："+loginRetString);
+				retStr = "ValidPassword";
+				return retStr;
 			}else{
-				//登陆失败、密码错误、没有该用户
-				System.err.println("登陆失败："+retString);
-				isSuccess = false;
-				break;
+				//登陆失败
+				System.err.println("登陆失败："+loginRetString);
+				retStr = "login error";
+				return retStr;
 			}
 		}
-    	return isSuccess;
 	}
 
 	private String getValidateCode(String pathName){
@@ -300,6 +353,7 @@ public class UnionPayClient {
 			identifyCode = "identify error";
 			e.printStackTrace();
 		}
+		httpGet.releaseConnection();
 		return identifyCode;
 	}
 	
@@ -310,6 +364,7 @@ public class UnionPayClient {
 	 * ValidPassword:密码错误
 	 * ValidCode:验证码错误
 	 * NoSuchUser:没有该用户
+	 * ServerError:系统处理失败
 	 */
 	private String loginUnionPay(String validateCode){
 		
@@ -344,6 +399,7 @@ public class UnionPayClient {
 	             * {  "respCode" : "000001",  "respDesc" : "该用户不存在"}
 	             * {  "respCode" : "1000002",  "respDesc" : "用户登录验证失败1次，错误次数达到5次将被锁定！"}
 	             * {  "respCode" : "000001",  "respDesc" : "验证码不正确，请重新输入"}
+	             * {  "respCode" : "9999",  "respDesc" : "系统处理失败"}
 	             */
 	            
 	            if(respCode.equals("000000")){
@@ -359,6 +415,8 @@ public class UnionPayClient {
 					}else{
 						resultString = "LoginError";
 					}
+				}else if(respCode.equals("9999")){
+					resultString = "ServerError";
 				}else{
 					resultString = "LoginError";
 				}

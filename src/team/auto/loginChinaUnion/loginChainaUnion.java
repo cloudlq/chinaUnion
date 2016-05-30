@@ -1,4 +1,4 @@
-package team.auto.loginUnionPay;
+package team.auto.loginChinaUnion;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -39,7 +39,7 @@ import org.apache.http.params.CoreConnectionPNames;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-public class loginUnionPay {
+public class loginChainaUnion {
 	
     public static String getLoginUrl = "https://service.chinaums.com/uis/validateCode";
     
@@ -51,7 +51,7 @@ public class loginUnionPay {
     
     public static String passWord = "Sc20150001";
     
-	public static void main(String[] args) {
+	public static void main1(String[] args) {
 		// TODO Auto-generated method stub
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 
@@ -59,20 +59,20 @@ public class loginUnionPay {
 		HttpGet httpGet = new HttpGet(getLoginUrl);
 		
 		try {
-			System.out.println("»ñÈ¡ÑéÖ¤Âë...");
-			//»ñÈ¡ÑéÖ¤Âë
+			System.out.println("ï¿½ï¿½È¡ï¿½ï¿½Ö¤ï¿½ï¿½...");
+			//ï¿½ï¿½È¡ï¿½ï¿½Ö¤ï¿½ï¿½
 			HttpResponse validateCodeHttpResponse = httpClient.execute(httpGet);
 			
-			//½«ÑéÖ¤Âë±£´æ
+			//ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ë±£ï¿½ï¿½
 			download(validateCodeHttpResponse.getEntity().getContent(), image_save_path);
 			
-			System.out.println("Ê¶±ðÑéÖ¤Âë...");
-			//Ê¶±ðÑéÖ¤Âë
+			System.out.println("Ê¶ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½...");
+			//Ê¶ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½
 			String identifyCode = "";
 			String imageResult = RuoKuai.createByPost("Hi_TuDou", "ds19910926", "1040", "90", "54544", "69727e89294f4facb6bb3507737523bb", image_save_path);
 			
 			if(imageResult.length() <= 0) {
-	    		System.out.println("Ê¶±ðÑéÖ¤Âë´íÎó£ºÎ´ÖªÎÊÌâ");
+	    		System.out.println("Ê¶ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½Î´Öªï¿½ï¿½ï¿½ï¿½");
 	    		return ;
 	    	}
 	    	Document dm;
@@ -87,29 +87,29 @@ public class loginUnionPay {
 					identifyCode = String.format("%s", resultNl.item(0).getFirstChild().getNodeValue());
 					
 				} else if (errorNl.getLength() > 0) {
-					System.out.println("Ê¶±ðÑéÖ¤Âë´íÎó£ºÎ´ÖªÎÊÌâ");
+					System.out.println("Ê¶ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½Î´Öªï¿½ï¿½ï¿½ï¿½");
 				} else {
-					System.out.println("Ê¶±ðÑéÖ¤Âë´íÎó£ºÎ´ÖªÎÊÌâ");
+					System.out.println("Ê¶ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½Î´Öªï¿½ï¿½ï¿½ï¿½");
 				}
 		        
 			} catch (Exception e) {
-				System.out.println("Ê¶±ðÑéÖ¤Âë´íÎó£ºXML½âÎö´íÎó");
+				System.out.println("Ê¶ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½XMLï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 				e.printStackTrace();
 			}		
 			
-			System.out.println("Ê¶±ðÑéÖ¤Âë³É¹¦");
-//			//ÓÃ»§ÊÖ¶¯ÊäÈëÑéÖ¤Âë
-//			System.out.println("ÇëÊäÈëÑéÖ¤Âë");
+			System.out.println("Ê¶ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½É¹ï¿½");
+//			//ï¿½Ã»ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½
+//			System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½");
 //			Scanner scanner = new Scanner(System.in);
 //			
 //			String identifyCode = scanner.nextLine();
 			
 //			scanner.close();
-			System.out.println("µÇÂ¼ÖÐ...");
-			//PostÌá½»µÇÂ¼ÐÅÏ¢
+			System.out.println("ï¿½ï¿½Â¼ï¿½ï¿½...");
+			//Postï¿½á½»ï¿½ï¿½Â¼ï¿½ï¿½Ï¢
 			HttpPost httpPost = new HttpPost(postLoginUrl);
 			
-			//ÉèÖÃPostÌá½»
+			//ï¿½ï¿½ï¿½ï¿½Postï¿½á½»
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(new BasicNameValuePair("userAcnt", userName));
             nvps.add(new BasicNameValuePair("userPwd", passWord));
@@ -119,15 +119,15 @@ public class loginUnionPay {
             httpPost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
             httpPost.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 20000);
             
-            //Ö´ÐÐpostµÇÂ¼
+            //Ö´ï¿½ï¿½postï¿½ï¿½Â¼
             HttpResponse uisWebLoginResponse = httpClient.execute(httpPost);
             
-//            //±£´æcookie
+//            //ï¿½ï¿½ï¿½ï¿½cookie
 //            CookieStore cookieStore = httpClient.getCookieStore();
 //		    httpClient.setCookieStore(cookieStore);
-//		    System.out.println("±£´æµÄcookieÎª" + cookieStore);
+//		    System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½cookieÎª" + cookieStore);
             
-		    //´òÓ¡µÇÂ¼Êä³öÐÅÏ¢
+		    //ï¿½ï¿½Ó¡ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
             HttpEntity uisWebLoginEntity = uisWebLoginResponse.getEntity();            
             StringBuilder result = new StringBuilder();  
             if (uisWebLoginEntity != null) {  
@@ -139,21 +139,21 @@ public class loginUnionPay {
                     result.append(str);  
                 }  
             }  
-            System.out.println("·þÎñÆ÷·µ»ØµÇÂ¼ÐÅÏ¢Îª£º" + result);
+            System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½Â¼ï¿½ï¿½Ï¢Îªï¿½ï¿½" + result);
             
-            //»ñÈ¡CSTÊ±¼ä
+            //ï¿½ï¿½È¡CSTÊ±ï¿½ï¿½
             Date date = new Date();            
             String tempLastGetLoginUrl ="https://service.chinaums.com/uis/uisWebLogin/desktop?";
     		SimpleDateFormat df=new SimpleDateFormat("EEE'%20'MMM'%20'dd'%20'yyyy'%20'HH:mm:ss'%20''GMT+0800''%20'(zzz)", Locale.US);  
     		String dateStr = df.format(date); 
     		
-    		//½øÈëÊ×Ò³    		   		
+    		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³    		   		
     		String desktopUrl = tempLastGetLoginUrl + dateStr;            
             HttpGet desktopUrlHttpget = new HttpGet(desktopUrl); 
             HttpResponse desktopResponse = httpClient.execute(desktopUrlHttpget);            
-            System.out.println("½øÈëdesktop£¬·þÎñÆ÷·µ»Ø×´Ì¬Îª" + desktopResponse.getStatusLine().getStatusCode());
+            System.out.println("ï¿½ï¿½ï¿½ï¿½desktopï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬Îª" + desktopResponse.getStatusLine().getStatusCode());
             
-            System.out.println("±£´ædesktop.html");
+            System.out.println("ï¿½ï¿½ï¿½ï¿½desktop.html");
          // Get hold of the response entity
             HttpEntity desktopEntity = desktopResponse.getEntity();
             // If the response does not enclose an entity, there is no need
@@ -169,17 +169,17 @@ public class loginUnionPay {
                     instream.close();
                 }
             }
-//          //±£´æcookie
+//          //ï¿½ï¿½ï¿½ï¿½cookie
 //            CookieStore cookieStore = httpClient.getCookieStore();
 //		    httpClient.setCookieStore(cookieStore);
-//		    System.out.println("±£´æµÄcookieÎª" + cookieStore); 
+//		    System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½cookieÎª" + cookieStore); 
 /*            
 		    //https://service.chinaums.com/uis/uisWebLogin/toIndex
 		    HttpGet toIndexHttpGet = new HttpGet("https://service.chinaums.com/uis/uisWebLogin/toIndex");
 		    HttpResponse toIndexResponse = httpClient.execute(toIndexHttpGet);
-		    System.out.println("½øÈëtoIndexHttpGet,·þÎñÆ÷·µ»Ø×´Ì¬ÂëÎª" + toIndexResponse.getStatusLine().getStatusCode());
+		    System.out.println("ï¿½ï¿½ï¿½ï¿½toIndexHttpGet,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Îª" + toIndexResponse.getStatusLine().getStatusCode());
 		    
-		    System.out.println("±£´ætoIndex.html");
+		    System.out.println("ï¿½ï¿½ï¿½ï¿½toIndex.html");
 		 // Get hold of the response entity
             HttpEntity toIndexEntity = toIndexResponse.getEntity();
             // If the response does not enclose an entity, there is no need
@@ -199,9 +199,9 @@ public class loginUnionPay {
 		    //https://service.chinaums.com/uis/accountCheckDetailQry/toAccountCheck
 		    HttpGet toAccountCheckHttpGet = new HttpGet("https://service.chinaums.com/uis/accountCheckDetailQry/toAccountCheck");
 		    HttpResponse toAccountCheckResponse = httpClient.execute(toAccountCheckHttpGet);
-		    System.out.println("½øÈëtoAccountCheck,·þÎñÆ÷·µ»Ø×´Ì¬ÂëÎª" + toAccountCheckResponse.getStatusLine().getStatusCode());
+		    System.out.println("ï¿½ï¿½ï¿½ï¿½toAccountCheck,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Îª" + toAccountCheckResponse.getStatusLine().getStatusCode());
 		    
-		    System.out.println("±£´ætoAccountCheck.html");
+		    System.out.println("ï¿½ï¿½ï¿½ï¿½toAccountCheck.html");
 		 // Get hold of the response entity
             HttpEntity toAccountCheckEntity = toAccountCheckResponse.getEntity();
             // If the response does not enclose an entity, there is no need
@@ -222,14 +222,14 @@ public class loginUnionPay {
 		  //Post https://service.chinaums.com/uis/accountCheckDetailQry/qryAccountCheck
 			HttpPost qryAccountCheckHttpPost = new HttpPost("https://service.chinaums.com/uis/accountCheckDetailQry/qryAccountCheck");
 			
-			//»ñÈ¡Ç°Ò»ÌìÈÕÆÚ
-			Calendar calendar = Calendar.getInstance(); //µÃµ½ÈÕÀú
-			calendar.setTime(date);//°Ñµ±Ç°Ê±¼ä¸³¸øÈÕÀú
-			calendar.add(Calendar.DAY_OF_MONTH, - 1);  //ÉèÖÃÎªÇ°Ò»Ìì
-			Date dBefore = calendar.getTime();   //µÃµ½Ç°Ò»ÌìµÄÊ±¼ä
+			//ï¿½ï¿½È¡Ç°Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			Calendar calendar = Calendar.getInstance(); //ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½
+			calendar.setTime(date);//ï¿½Ñµï¿½Ç°Ê±ï¿½ä¸³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			calendar.add(Calendar.DAY_OF_MONTH, - 1);  //ï¿½ï¿½ï¿½ï¿½ÎªÇ°Ò»ï¿½ï¿½
+			Date dBefore = calendar.getTime();   //ï¿½Ãµï¿½Ç°Ò»ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 			SimpleDateFormat beginDate=new SimpleDateFormat("yyyy-MM-dd");  
     		String settDateBegin = beginDate.format(dBefore); 
-			//ÉèÖÃPostÌá½»body
+			//ï¿½ï¿½ï¿½ï¿½Postï¿½á½»body
 			List<NameValuePair> qryAccountCheckNvps = new ArrayList<NameValuePair>();
 			qryAccountCheckNvps.add(new BasicNameValuePair("amount1", null));
 			qryAccountCheckNvps.add(new BasicNameValuePair("amount2", null));
@@ -256,12 +256,12 @@ public class loginUnionPay {
             qryAccountCheckHttpPost.setEntity(new UrlEncodedFormEntity(qryAccountCheckNvps, Consts.UTF_8));
             qryAccountCheckHttpPost.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 20000);
             
-            //Ö´ÐÐpost  ²éÕË
+            //Ö´ï¿½ï¿½post  ï¿½ï¿½ï¿½ï¿½
             HttpResponse qryAccountCheckResponse = httpClient.execute(qryAccountCheckHttpPost);
-            System.out.println("½øÈëqryAccountCheck,·þÎñÆ÷·µ»Ø×´Ì¬ÂëÎª" + qryAccountCheckResponse.getStatusLine().getStatusCode());
+            System.out.println("ï¿½ï¿½ï¿½ï¿½qryAccountCheck,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Îª" + qryAccountCheckResponse.getStatusLine().getStatusCode());
             
-            System.out.println("±£´æqryAccountCheck.html");
-            System.out.println("Ê¶±ð»ñÈ¡cacheId..");
+            System.out.println("ï¿½ï¿½ï¿½ï¿½qryAccountCheck.html");
+            System.out.println("Ê¶ï¿½ï¿½ï¿½È¡cacheId..");
          // Get hold of the response entity
             HttpEntity qryAccountCheckEntity = qryAccountCheckResponse.getEntity();
             // If the response does not enclose an entity, there is no need
@@ -271,7 +271,7 @@ public class loginUnionPay {
                 InputStream instream = qryAccountCheckEntity.getContent();
                 try {
                 	
-                	//Æ¥ÅäµÃµ½cacheId
+                	//Æ¥ï¿½ï¿½Ãµï¿½cacheId
                 	String urlPattern = "\"cacheId\":\"A_[0-9]*\"";
                     //instream.read();
                 	CacheIdStr = saveFileAndFindData("F://WebCode//html//", "qryAccountCheck.html", instream, urlPattern);
@@ -283,14 +283,14 @@ public class loginUnionPay {
             }
             if(CacheIdStr.length() < 15)
             {
-            	System.out.println("Ê¶±ðcacheIdÊ§°Ü£º" + CacheIdStr);
+            	System.out.println("Ê¶ï¿½ï¿½cacheIdÊ§ï¿½Ü£ï¿½" + CacheIdStr);
             	return;
             }
             CacheIdStr = CacheIdStr.substring(11, CacheIdStr.length() - 1);
-            System.out.println("³É¹¦Ê¶±ðcacheIdÎª£º" + CacheIdStr);
+            System.out.println("ï¿½É¹ï¿½Ê¶ï¿½ï¿½cacheIdÎªï¿½ï¿½" + CacheIdStr);
             //post https://service.chinaums.com/uis/viewReportServlet
             HttpPost viewReportHttpPost = new HttpPost("https://service.chinaums.com/uis/viewReportServlet");
-          //ÉèÖÃPostÌá½»body
+          //ï¿½ï¿½ï¿½ï¿½Postï¿½á½»body
 			List<NameValuePair> viewReportNvps = new ArrayList<NameValuePair>();
 			viewReportNvps.add(new BasicNameValuePair("action", "3"));
 			viewReportNvps.add(new BasicNameValuePair("cacheId", CacheIdStr));
@@ -302,11 +302,11 @@ public class loginUnionPay {
 			viewReportHttpPost.setEntity(new UrlEncodedFormEntity(viewReportNvps, Consts.UTF_8));
 			viewReportHttpPost.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 20000);
 	            
-	        //Ö´ÐÐpost  ²éÕË
+	        //Ö´ï¿½ï¿½post  ï¿½ï¿½ï¿½ï¿½
 	        HttpResponse viewReportResponse = httpClient.execute(viewReportHttpPost);
-	        System.out.println("½øÈëviewReport,·þÎñÆ÷·µ»Ø×´Ì¬ÂëÎª" + viewReportResponse.getStatusLine().getStatusCode());
+	        System.out.println("ï¿½ï¿½ï¿½ï¿½viewReport,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Îª" + viewReportResponse.getStatusLine().getStatusCode());
 	            
-	        System.out.println("±£´æviewReport.html");
+	        System.out.println("ï¿½ï¿½ï¿½ï¿½viewReport.html");
 	         // Get hold of the response entity
 	        HttpEntity viewReportEntity = viewReportResponse.getEntity();
 	            // If the response does not enclose an entity, there is no need
@@ -322,8 +322,8 @@ public class loginUnionPay {
 	                    instream.close();
 	                }
 	            }
-			//ÏÂÔØtxt action=6&format=text&isNeedFormula=0&dispRatio=100&reportName=c2V0dGxlUmVjb3JkU2VhcmNoVGVtcGxhdGUvMjAxMzA5MDkwMDAwMDAwMS5yYXE%2C&cacheId=A_52829&saveAsName=MjAxNjA1MjExMDMxNTY%2C&textDataSeparator=%7C&textDataLineBreak=%0D%0A&excelPageStyle=0&excelFormat=2003&wordFormat=2003&excelUsePaperSize=yes&width=988px&height=0&columns=13&pdfExportStyle=text%2C1&backAndRefresh=yes
-	        //±£´ætxtÎÄ¼þ
+			//ï¿½ï¿½ï¿½ï¿½txt action=6&format=text&isNeedFormula=0&dispRatio=100&reportName=c2V0dGxlUmVjb3JkU2VhcmNoVGVtcGxhdGUvMjAxMzA5MDkwMDAwMDAwMS5yYXE%2C&cacheId=A_52829&saveAsName=MjAxNjA1MjExMDMxNTY%2C&textDataSeparator=%7C&textDataLineBreak=%0D%0A&excelPageStyle=0&excelFormat=2003&wordFormat=2003&excelUsePaperSize=yes&width=988px&height=0&columns=13&pdfExportStyle=text%2C1&backAndRefresh=yes
+	        //ï¿½ï¿½ï¿½ï¿½txtï¿½Ä¼ï¿½
 	        String txtPathString = "F://WebCode//Data//";
 	        SimpleDateFormat txtDatefDateFormat=new SimpleDateFormat("yyyyMMddHHmmss");  
     		String txtString = txtDatefDateFormat.format(date);  
@@ -331,9 +331,9 @@ public class loginUnionPay {
 	        HttpGet getTxtHttpGet = new HttpGet("https://service.chinaums.com/uis/viewReportServlet?action=6&format=text&isNeedFormula=0&dispRatio=100&reportName=c2V0dGxlUmVjb3JkU2VhcmNoVGVtcGxhdGUvMjAxMzA5MDkwMDAwMDAwMS5yYXE%2C&cacheId="+CacheIdStr+"&saveAsName="+saveTxtName+"&textDataSeparator=%7C&textDataLineBreak=%0D%0A&excelPageStyle=0&excelFormat=2003&wordFormat=2003&excelUsePaperSize=yes&width=988px&height=0&columns=13&pdfExportStyle=text%2C1&backAndRefresh=yes");
 	        
 	        HttpResponse getTxtResponse = httpClient.execute(getTxtHttpGet);            
-            System.out.println("ÏÂÔØtxt£¬·þÎñÆ÷·µ»Ø×´Ì¬Îª" + getTxtResponse.getStatusLine().getStatusCode());
+            System.out.println("ï¿½ï¿½ï¿½ï¿½txtï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬Îª" + getTxtResponse.getStatusLine().getStatusCode());
             
-            System.out.println("ÏÂÔØ" + txtString + ".txt");
+            System.out.println("ï¿½ï¿½ï¿½ï¿½" + txtString + ".txt");
          // Get hold of the response entity
             HttpEntity getTxtEntity = getTxtResponse.getEntity();
             // If the response does not enclose an entity, there is no need
@@ -415,7 +415,7 @@ public class loginUnionPay {
         return false;
     }
 
-	//½«ÊäÈëÁ÷ÖÐµÄÄÚÈÝÊä³öµ½pathÖ¸¶¨µÄÂ·¾¶£¬fileNameÖ¸¶¨µÄÎÄ¼þÃû  
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pathÖ¸ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½fileNameÖ¸ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½  
     private static void saveToFile(String path, String fileName, InputStream is) {  
         Scanner sc = new Scanner(is);  
         Writer os = null;  
@@ -438,13 +438,13 @@ public class loginUnionPay {
                 os.close();  
                 }catch(IOException e){  
                     e.printStackTrace();  
-                    System.out.println("Êä³öÁ÷¹Ø±ÕÊ§°Ü£¡");  
+                    System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½Ê§ï¿½Ü£ï¿½");  
                 }  
             }  
         }  
     }
     
-  //½«ÊäÈëÁ÷ÖÐµÄÄÚÈÝÊä³öµ½pathÖ¸¶¨µÄÂ·¾¶£¬fileNameÖ¸¶¨µÄÎÄ¼þÃû  
+  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pathÖ¸ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½fileNameÖ¸ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½  
     private static String saveFileAndFindData(String path, String fileName, InputStream is, String urlPattern) {  
     	//String urlPattern = "\"cacheId\":\"A_[0-9]*\"";
     	String resultString = "";
@@ -458,7 +458,7 @@ public class loginUnionPay {
             	Matcher matcher = pattern.matcher(tempString);
             	while(matcher.find()){
             		resultString = matcher.group();
-            		System.out.println("ÕýÔò±í´ïÊ½Æ¥Åä³É¹¦½á¹ûÎª£º"+ resultString);
+            		System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½Æ¥ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½"+ resultString);
             	}                    
                 os.write(tempString);  
             }  
@@ -476,7 +476,7 @@ public class loginUnionPay {
                 os.close();  
                 }catch(IOException e){  
                     e.printStackTrace();  
-                    System.out.println("Êä³öÁ÷¹Ø±ÕÊ§°Ü£¡");  
+                    System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½Ê§ï¿½Ü£ï¿½");  
                 }//end catch  
             }//end if  
         }//end finally  
