@@ -61,7 +61,6 @@ public class UnionPayClient {
 		this.passWord = pass_word;
 		this.httpClient = new DefaultHttpClient();
 	}
-	
 	/*
 	 * 
 	 * 1、获取验证码
@@ -270,7 +269,7 @@ public class UnionPayClient {
 					return retStr;
 		    	}
 		    	
-		    	downloadExcel(cacheIdString, textPath);
+		    	downloadText(cacheIdString, textPath);
 		    	
 		    	retStr = "success";
 				return retStr;
