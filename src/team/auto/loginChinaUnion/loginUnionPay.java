@@ -7,16 +7,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class loginUnionPay {
 
-    public static void main(String[] args) throws SQLException {
+    public static void main1(String[] args) throws SQLException {
     	System.out.println("正在获取list...");
-		List<Account> alist=getmlist("0");
-		System.out.println(alist.size());
+		
+    	List<Account> alist=getmlist("0");
+		
+    	System.out.println(alist.size());
 		List<Account> blist=new ArrayList<Account>();
 		System.out.println("获取list成功");
+		
+		List<Account> errorList=new ArrayList<Account>();
 		for(int i=0;i<alist.size();i++)
 		{
 			String account=alist.get(i).getAccount();
@@ -25,21 +31,32 @@ public class loginUnionPay {
 	    	uPayClient.setImagePath("E://Eclipse_code//image");
 	    	uPayClient.setTextPath("E://Eclipse_code//data");
 	    	
-	    	String ret = uPayClient.downloadAccountCheckWithDate("2015-12-01","2015-12-31");
+	    	String ret = uPayClient.downloadAccountCheckWithDate("2016-01-01","2016-01-31");
 	    	
-	    	if(ret.equals("no such user") || ret.equals("ValidPassword"))
+	    	if(ret.equals("success")){
+	    		
+	    	}else if(ret.equals("no such user") || ret.equals("ValidPassword"))
 	    	{
 	    		blist.add(alist.get(i));
+	    	}else{
+	    		errorList.add(alist.get(i));
 	    	}
 	    	System.out.println("第"+(i+1)+"个帐号返回值："+ ret);			
 		}
-		System.out.println("用户不存在或者用户密码错误的用户如下：");	
+		System.out.println("登录错误的用户共有"+ errorList.size() + "个，如下：");	
+		for(int i = 0; i < errorList.size();i++)
+		{
+			System.out.println("帐号:" + errorList.get(i).getAccount() + "	密码：" + errorList.get(i).getPassword());	
+		}
+		
+		
+		System.out.println("用户不存在或者用户密码错误的用户共有"+ blist.size() + "个，如下：");	
 		for(int i = 0; i < blist.size();i++)
 		{
 			System.out.println("帐号:" + blist.get(i).getAccount() + "	密码：" + blist.get(i).getPassword());	
 		}
     }
-    
+
     //根据状态查找需要的list
     public static  List<Account> getmlist(String state) throws SQLException{
     	List<Account> mlist = new ArrayList<Account>();

@@ -193,9 +193,9 @@ public class UnionPayClient {
 	 * input error：参数输入有误
 	 * no such user：没有该用户
 	 * ValidPassword：密码错误
-	 * CacheId error：CacheId错误
-	 * qryAccountCheck error：对账单请求失败 
-	 * login error：未知登录错误
+	 * //CacheId error：CacheId错误
+	 * //qryAccountCheck error：对账单请求失败 
+	 * //login error：未知登录错误
 	 */
 	public String downloadAccountCheckWithDate(String settDateBegin, String settDateEnd){
 		String retStr;
@@ -256,8 +256,7 @@ public class UnionPayClient {
 		    	//CacheId获取失败
 		    	if(cacheIdString.equals("error")){
 		    		System.err.println("CacheId获取失败");
-		    		retStr = "CacheId error";
-					return retStr;
+					continue;
 		    	}
 		    	
 		    	//提交运算报表请求
@@ -265,8 +264,7 @@ public class UnionPayClient {
 		    	//运算报表请求失败
 		    	if(qryretString.equals("error")){
 		    		System.err.println("运算报表请求失败");
-		    		retStr = "qryAccountCheck error";
-					return retStr;
+		    		continue;
 		    	}
 		    	
 		    	downloadText(cacheIdString, textPath);
@@ -294,8 +292,7 @@ public class UnionPayClient {
 			}else{
 				//登陆失败
 				System.err.println("登陆失败："+loginRetString);
-				retStr = "login error";
-				return retStr;
+				continue;
 			}
 		}
 	}
